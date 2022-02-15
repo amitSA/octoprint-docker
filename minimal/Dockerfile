@@ -2,7 +2,7 @@ ARG PYTHON_BASE_IMAGE=3-slim-buster
 
 FROM python:${PYTHON_BASE_IMAGE} AS build
 
-ARG octoprint_ref 
+ARG octoprint_ref
 ENV octoprint_ref ${octoprint_ref:-master}
 
 RUN apt-get update && apt-get install -y \
@@ -31,6 +31,7 @@ ENV PATH "${PYTHONUSERBASE}/bin:${PATH}"
 
 WORKDIR /home/octoprint/tmp
 RUN pip install .
+RUN pip install SmartPow==0.0.0rc2
 WORKDIR /octoprint
 COPY config.yaml /octoprint/octoprint
 RUN rm -rf /home/octoprint/tmp
