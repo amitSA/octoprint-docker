@@ -1,7 +1,9 @@
 builddir=.build
 cachedir=.cache
-octoprint_ref?= $(shell ./scripts/version.sh "OctoPrint/OctoPrint")
-platforms?="linux/arm/v7,linux/arm64,linux/amd64"
+octoprint_ref?="1.6.1"
+# platforms?="linux/arm/v7,linux/arm64,linux/amd64"
+platforms?="linux/amd64"
+tag:=1.6.1-dev.1
 
 .PHONY: test
 
@@ -40,13 +42,13 @@ e2e:
 		--secret id=password,src=./test/password.txt \
 		--file ./test/Dockerfile \
 		--progress tty -t octoprint/octoprint:e2e ./test
-	docker-compose -f test/e2e-compose.yml up	
+	docker-compose -f test/e2e-compose.yml up
 
 build-minimal:
-	docker build -t octoprint/octoprint:minimal -f minimal/Dockerfile --build-arg octoprint_ref=${octorprint_ref} ./minimal
+	docker buildx build --push --platform ${platforms} -t amitsaxena333/octoprint-docker:${tag} -f minimal/Dockerfile --build-arg octoprint_ref=${octoprint_ref} ./minimal
 
 test-minimal:
 	docker run -it --name octoprint_minimal -p 55000:5000 octoprint/octoprint:minimal
 
-clean-minimal:	
+clean-minimal:
 	docker rm octoprint_minimal

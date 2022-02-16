@@ -3,7 +3,7 @@ ARG PYTHON_BASE_IMAGE=3-slim-buster
 FROM python:${PYTHON_BASE_IMAGE} AS build
 
 ARG octoprint_ref
-ENV octoprint_ref ${octoprint_ref:-1.6.1}
+ENV octoprint_ref ${octoprint_ref:-master}
 
 RUN apt-get update && apt-get install -y \
   build-essential \
